@@ -1,0 +1,11 @@
+[node name: "World1Scene"]
+class_name World1Scene
+extends LevelScene
+
+func _ready():
+    super._ready()
+    # World 1 specific setup - Green Hills
+    background.set_theme("green_hills")
+    enemy_spawner.set_enemy_type("slime", "goblin")
+    # 5 enemies per level initially
+    enemy_spawner.set_difficulty_multiplier(1.0)

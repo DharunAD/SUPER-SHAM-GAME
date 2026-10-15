@@ -1,0 +1,10 @@
+[node name: "World3Scene"]
+class_name World3Scene
+extends LevelScene
+
+func _ready():
+    super._ready()
+    # World 3 specific setup - Frost Peak
+    background.set_theme("frost_peak")
+    enemy_spawner.set_enemy_type("yetisnow", "ice_wizard")
+    enemy_spawner.set_difficulty_multiplier(1.4)

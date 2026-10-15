@@ -1,0 +1,18 @@
+[node name: "SlimeEnemy"]
+class_name SlimeEnemy
+extends Enemy
+
+func _ready():
+    $AnimationPlayer.play("idle")
+    $Sprite.modulate = Color.GREEN
+    health = 50
+    $Collision2D.mask = 1
+
+func _physics_process(delta):
+    super._physics_process(delta)
+    # Slime-specific behavior - simple AI
+    var player = get_tree().get_first_node_in_group("player")
+    if player:
+        var to_player = player.global_position - global_position
+        if to_player.length() < 200:
+            velocity.x = 50 * sgn(to_player.x)

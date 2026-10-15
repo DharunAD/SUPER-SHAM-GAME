@@ -1,0 +1,10 @@
+[node name: "World4Scene"]
+class_name World4Scene
+extends LevelScene
+
+func _ready():
+    super._ready()
+    # World 4 specific setup - Electric City
+    background.set_theme("electric_city")
+    enemy_spawner.set_enemy_type("robot", "laser_bot")
+    enemy_spawner.set_difficulty_multiplier(1.6)

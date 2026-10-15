@@ -1,0 +1,18 @@
+[node name: "GoblinEnemy"]
+class_name GoblinEnemy
+extends Enemy
+
+func _ready():
+    $AnimationPlayer.play("idle")
+    $Sprite.modulate = Color(0.2, 0.5, 0.8)
+    health = 75
+    $Collision2D.mask = 1
+    # Goblins have a small attack
+    $AttackHitbox.damage = 30
+
+func _physics_process(delta):
+    super._physics_process(delta)
+    # Goblin-specific behavior - charges player
+    var player = get_tree().get_first_node_in_group("player")
+    if player and global_position.distance_to(player.global_position) < 300:
+        velocity.x = 100 * sgn(player.global_position.x - global_position.x)

@@ -1,0 +1,51 @@
+# Android Export Preset for Super Sham - Save Suganya
+# This configuration is ready for Godot 4 Android export
+
+[export_preset]
+target = "Android"
+product_name = "Super Sham - Save Suganya"
+company_name = "Dharun"
+
+# Android SDK configuration
+android_sdk_path = "/path/to/android/sdk"
+android_ndk_path = "/path/to/android/ndk"
+java_path = "/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
+
+# Keystore configuration (for debug builds)
+keystore_path = ""
+keystore_password = ""
+key_alias = ""
+key_password = ""
+
+# Version settings
+android_version_code = 1
+android_version_name = "1.0"
+minimum_sdk = "21"
+target_sdk = "33"
+
+# Build settings
+export_debug = true
+strip_debug_symbols = false
+
+# Enable touch controls
+use_mobile_inputs = true
+screen_orientation = "landscape"
+
+# Resize 3D textures
+disable_srgb = false
+compress_textures = true
+
+# Scene settings
+export_navigation = true
+export_physics = true
+
+# Optimization
+optimize_size = true
+optimize_speed = false
+
+# Audio
+keep_audio_streams = true
+
+# Output settings
+output_dir = "/tmp/super_sham/export/android"
+bin_result = true

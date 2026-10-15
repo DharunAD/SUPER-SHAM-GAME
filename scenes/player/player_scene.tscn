@@ -1,0 +1,92 @@
+[node name: "Player"]
+class_name PlayerScene
+extends Area2D
+
+# Components
+export var sprite_frames: PackedStringArray
+export var hitbox_size: Vector2 = Vector2(50, 50)
+
+func _ready():
+    # Initialize components
+    setup_collision()
+    setup_raycast()
+    setup_animations()
+    health = 100
+    score = 0
+    is_attacking = false
+    attack_timer = 0
+    
+func setup_collision():
+    $Collision2D.mask = 1
+    $Collision2D.layer = 1
+
+func setup_raycast():
+    $RayCast2D.length = 100
+    $RayCast2D.collision_mask = 1
+
+func setup_animations():
+    var ap = $AnimationPlayer
+    # Idle animation
+    ap.add_animation("idle")
+    # Run animation
+    ap.add_animation("run")
+    # Jump animation
+    ap.add_animation("jump")
+    # Attack animation
+    ap.add_animation("attack")
+    # Death animation
+    ap.add_animation("die")
+
+func take_damage(amount):
+    health -= amount
+    health = max(0, health)
+    # Flash red
+    $Sprite.modulate = Color.RED
+    set_modulate_delay(0.1)
+    if health <= 0:
+        die()
+
+func die():
+    $AnimationPlayer.play("die")
+    $Collision2D.disabled = true
+    emit_signal("player_died")
+
+func _physics_process(delta):
+    # Movement handling
+    var velocity = Vector2.ZERO
+    
+    # Input
+    var move_input = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+    velocity = move_input * 200
+    
+    # Jump
+    if Input.is_action_justpressed("ui_up") and is_on_floor:
+        velocity.y = -400
+    
+    # Attack
+    if Input.is_action_justpressed("ui_attack") and not is_attacking:
+        is_attacking = true
+        attack_timer = 0.2
+        $AnimationPlayer.play("attack")
+        $AttackHitbox.visible = true
+    
+    # Timers
+    if is_attacking:
+        attack_timer -= delta
+        if attack_timer <= 0:
+            is_attacking = false
+            $AttackHitbox.visible = false
+            $AnimationPlayer.play("idle")
+    
+    # Apply gravity
+    if not is_on_floor:
+        velocity.y += 980 * delta
+    
+    # Move and collide
+    is_on_floor = false
+    if $RayCast2D.is_colliding():
+        is_on_floor = true
+        if velocity.y > 0:
+            velocity.y = 0
+    
+    move_and_collide(velocity * delta)

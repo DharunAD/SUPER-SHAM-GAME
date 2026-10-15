@@ -1,0 +1,35 @@
+[node name: "EndingScene"]
+class_name EndingScene
+extends Node2D
+
+func _ready():
+    # Play ending cinematic
+    $IntroText.visible = true
+    $ShamAndSuganya.visible = true
+    $EmbraceAnimation.play("embrace")
+    
+    # Fade in effect
+    yield(get_tree(), "process_frame")
+    yield(get_tree(), "process_frame")
+    
+    # Show emotional dialogue
+    show_dialogue()
+    
+func show_dialogue():
+    # Emotional dialogue between Sham and Suganya
+    var dialogue = [
+        "Sham: Suganya! I've come to rescue you!",
+        "Suganya: Sham! You came back for me!",
+        "Sham: Always. Nothing will keep us apart.",
+        "Suganya: My hero..."
+    ]
+    
+    for line in dialogue:
+        $DialogueLabel.text = line
+        yield(get_tree(), "process_frame")
+        yield(get_tree(), "process_frame")
+    
+    # Fade out and show credits
+    $FadeEffect.visible = true
+    yield(get_tree(), "process_frame")
+    get_tree().change_scene_to_file("res://scenes/credits.tscn")

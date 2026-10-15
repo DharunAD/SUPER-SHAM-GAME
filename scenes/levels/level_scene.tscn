@@ -1,0 +1,82 @@
+[node name: "LevelScene"]
+class_name LevelScene
+extends Node2D
+
+# World configuration
+export var world_number: int = 1
+export var level_number: int = 1
+
+# References
+@onready var player_spawn = $PlayerSpawn
+@onready var checkpoint_area = $CheckpointArea
+@onready var enemy_spawner = $EnemySpawner
+@onready var background = $Background
+@onready var ui = $GameUI
+
+# Game state
+var current_level = 1
+var is_level_active = false
+
+func _ready():
+    setup_level()
+    ui.register_player($Player)
+    setup_enemies()
+    reset_player()
+
+func setup_level():
+    # Set up background for this world
+    background.set_world(world_number)
+    # Position player at spawn
+    $Player.position = player_spawn.position
+    # Connect signals
+    $CheckpointArea.body_entered.connect(_on_checkpoint_entered)
+    enemy_spawner.spawn_enemies(level_number)
+
+func reset_player():
+    $Player.position = player_spawn.position
+    $Player.health = 100
+    $Player.score = 0
+    $Player.is_on_floor = true
+
+func _on_checkpoint_entered(body):
+    if body.is_in_group("player"):
+        current_level = checkpoint_area.get("checkpoint_number")
+        ui.update_checkpoint(current_level)
+        save_game_state()
+
+func save_game_state():
+    var data = {
+        "world": world_number,
+        "level": current_level,
+        "checkpoint": current_level,
+        "player_health": $Player.health,
+        "player_score": $Player.score
+    }
+    var file = File.new()
+    file.make_dir("user://saves/")
+    file.open("user://saves/game_save.sav", File.WRITE)
+    file.store_json(data)
+    file.close()
+
+func _process(delta):
+    if not is_level_active:
+        return
+    
+    # Camera follow player
+    $Camera2D.position = $Player.position
+    
+    # Check level completion
+    check_level_complete()
+
+func check_level_complete():
+    # Check if all enemies are defeated
+    var remaining = enemy_spawder.get_remaining_enemies()
+    if remaining == 0:
+        $AnimationPlayer.play("level_complete")
+        yield($AnimationPlayer, "animation_finished")
+        complete_level()
+
+func complete_level():
+    is_level_active = false
+    ui.level_completed()
+    get_tree().change_scene_to_file("res://scenes/world_{}.tscn".format(world_number + 1))

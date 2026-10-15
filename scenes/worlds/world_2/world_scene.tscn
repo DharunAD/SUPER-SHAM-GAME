@@ -1,0 +1,10 @@
+[node name: "World2Scene"]
+class_name World2Scene
+extends LevelScene
+
+func _ready():
+    super._ready()
+    # World 2 specific setup - Desert Ruins
+    background.set_theme("desert_ruins")
+    enemy_spawner.set_enemy_type("mummy", "scorpion")
+    enemy_spawner.set_difficulty_multiplier(1.2)

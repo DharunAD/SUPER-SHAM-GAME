@@ -1,0 +1,10 @@
+[node name: "World5Scene"]
+class_name World5Scene
+extends LevelScene
+
+func _ready():
+    super._ready()
+    # World 5 specific setup - Void Palace
+    background.set_theme("void_palace")
+    enemy_spawner.set_enemy_type("shadow", "void_walker")
+    enemy_spawner.set_difficulty_multiplier(1.8)

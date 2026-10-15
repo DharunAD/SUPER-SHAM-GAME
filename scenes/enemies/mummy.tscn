@@ -1,0 +1,27 @@
+[node name: "MummyEnemy"]
+class_name MummyEnemy
+extends Enemy
+
+func _ready():
+    $AnimationPlayer.play("idle")
+    $Sprite.modulate = Color(0.8, 0.6, 0.2)
+    health = 60
+    $Collision2D.mask = 1
+    # Mummies shoot projectiles
+    $AttackHitbox.damage = 25
+
+func _physics_process(delta):
+    super._physics_process(delta)
+    # Mummy-specific behavior - shoots fireballs periodically
+    var player = get_tree().get_first_node_in_group("player")
+    if player:
+        var to_player = player.global_position - global_position
+        if randf() < 0.01:
+            shoot_fireball()
+
+func shoot_fireball():
+    var fireball = $FireballScene.instance()
+    add_child(fireball)
+    fireball.position = global_position
+    var dir = (player.global_position - global_position).normalized()
+    fireball.velocity = dir * 400

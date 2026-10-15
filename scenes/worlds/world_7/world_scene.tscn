@@ -1,0 +1,12 @@
+[node name: "World7Scene"]
+class_name World7Scene
+extends LevelScene
+
+func _ready():
+    super._ready()
+    # World 7 specific setup - Sabari's Lair
+    background.set_theme("sabaris_lair")
+    enemy_spawner.set_enemy_type("demon", "sabari_minion")
+    enemy_spawner.set_difficulty_multiplier(2.5)
+    # Boss battle setup
+    enemy_spawner.boss_battle = true

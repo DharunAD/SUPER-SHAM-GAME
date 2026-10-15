@@ -1,0 +1,29 @@
+[node name: "CreditsScene"]
+class_name CreditsScene
+extends Node2D
+
+func _ready():
+    # Display credits
+    $Title.text = "SUPER SHAM - SAVE SUGANYA"
+    $Developer.text = "Developer: Dharun"
+    $Engine.text = "Engine: Godot 4"
+    
+    # List team/credits
+    var credits = [
+        "Game Design: Dharun",
+        "Character Design: Original",
+        "Programming: GDScript",
+        "Art: Original Assets",
+        "Sound: Original Composition",
+        "Level Design: 7 Worlds",
+        "Testing: QA Team"
+    ]
+    
+    for i, credit in enumerate(credits):
+        $CreditsList.append_item(credit)
+    
+    # Wait for user to press a key
+    yield(get_tree(), "idle")
+    
+    # Return to main menu or quit
+    get_tree().set_pause_process(true)

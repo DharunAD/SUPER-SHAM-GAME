@@ -1,0 +1,10 @@
+[node name: "World6Scene"]
+class_name World6Scene
+extends LevelScene
+
+func _ready():
+    super._ready()
+    # World 6 specific setup - Ancient Temple
+    background.set_theme("ancient_temple")
+    enemy_spawner.set_enemy_type("mummy", "skeleton_warrior")
+    enemy_spawner.set_difficulty_multiplier(2.0)
